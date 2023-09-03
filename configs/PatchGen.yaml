@@ -1,0 +1,10 @@
+RDP: # Robust D Patch
+  learning_rate : 10.0
+  batch_size : 32
+  max_iter : 5000
+  patch_shape : ${tuple:3, 100, 100}
+  crop_range : ${tuple:0, 0}
+  brightness_range : ${tuple:0.8, 1.0}
+  rotation_weights : ${tuple:1, 0, 0, 0}
+  patch_location : ${tuple:200, 310}
+  sample_size : 10
