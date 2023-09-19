@@ -1,5 +1,5 @@
 learning_rate : 0.1
-batch_size : 2
+batch_size : 16
 max_iter : 100
 patch_shape : ${tuple:3, 100, 100}
 patch_location : ${tuple:200, 310}

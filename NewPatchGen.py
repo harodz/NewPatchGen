@@ -7,8 +7,12 @@ import numpy as np
 from tqdm.auto import trange
 import torch
 import torchvision.transforms.functional as TF
+from torch.utils.tensorboard import SummaryWriter
+
 import random
 from PIL import Image
+import os
+
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +21,7 @@ class NewPatchGen():
 
     def __init__(
         self,
-        estimator: "OBJECT_DETECTOR_TYPE",
+        model: torch.nn.Module,
         num_cat: int = 80,
         patch_shape: Tuple[int, int, int] = (3, 40, 40),
         patch_location: Tuple[int, int] = (0, 0),
@@ -28,10 +32,10 @@ class NewPatchGen():
         target_ID: int = 11,
         verbose: bool = True,
     ):
+        self.writer = SummaryWriter(log_dir='./tensorboard_logs')
 
-        super().__init__(estimator=estimator, summary_writer=summary_writer)
-
-        self.device = self.estimator._device
+        self.device = torch.device(
+            'cuda:0' if torch.cuda.is_available() else 'cpu')
 
         self.patch_shape = patch_shape
         self.learning_rate = learning_rate
@@ -39,7 +43,8 @@ class NewPatchGen():
         self.batch_size = batch_size
         self.num_cat = num_cat
 
-        self._patch = torch.ones(self.patch_shape, device=self.device) * 255
+        self._patch = torch.rand(
+            self.patch_shape, device=self.device, dtype=torch.float32)
         self._patch.requires_grad = True
         self.optimizer = torch.optim.Adam(
             [self._patch], lr=self.learning_rate, amsgrad=True)
@@ -48,14 +53,28 @@ class NewPatchGen():
         self.patch_location = patch_location
         self.sample_size = sample_size
         self.target_ID = target_ID
+        self.model = model
+
+        self.max_prob = max_pro(
+            model=self.model, num_cat=self.num_cat, target_ID=self.target_ID).to(self.device)
 
     def apply_patch(self, x: torch.tensor):
+        # Get the height and width of x
+        _, _, H, W = x.shape
 
         # Apply patch:
         x_1, y_1 = self.patch_location
-        x_2, y_2 = x_1 + self._patch.shape[0], y_1 + self._patch.shape[1]
+        x_2, y_2 = x_1 + self.patch_shape[1], y_1 + self.patch_shape[2]
 
-        x[:, x_1:x_2, y_1:y_2, :] = self._patch
+        if x_2 > H or y_2 > W:
+            raise ValueError(
+                "Patch goes beyond the boundaries of the input tensor.")
+
+        # check if patch shape has batch size, if not add it
+        if len(self._patch.shape) == 3:
+            self._patch = self._patch.unsqueeze(0)
+
+        x[:, :, x_1:x_2, y_1:y_2] = self._patch[0]
 
         return x
 
@@ -91,16 +110,16 @@ class NewPatchGen():
 
     def generate(self, x):
         # Load image and to tensor
-        og_x = torch.from_numpy(x).to(self.device)
+        og_x = torch.from_numpy(x).to(device=self.device)
         x = og_x.detach().clone()
 
         # check if output folder exists, if not, create one
-        """
-        Waiting for copilot
-        """
+        isExist = os.path.exists('outputs')
+        if not isExist:
+            os.makedirs('outputs')
 
         for i_step in trange(self.max_iter, desc="RobustDPatch iteration", disable=not self.verbose):
-            if i_step == 0 or (i_step + 1) % 100 == 0:
+            if i_step == 0 or (i_step + 1) % 5 == 0:
                 logger.info("Training Step: %i", i_step + 1)
 
             epi_loss = 0
@@ -115,38 +134,68 @@ class NewPatchGen():
 
             New_batch = torch.cat(Transformations, dim=0)
 
-            for i_batch in range(self.batch_size):
-                loss = torch.mean(self.max_prob(New_batch, 11))
-                epi_loss += loss
+            loss = torch.mean(self.max_prob(New_batch))
 
-                loss.backward()
-                self.optimizer.step()
-                self.optimizer.zero_grad(set_to_none=True)
-                self._patch.data.clamp_(0, 255)
+            epi_loss += loss
+            loss.backward()
 
-            patch_copy = self._patch.detach().clone()
-            patch_copy = TF.to_pil_image(patch_copy)
-            img = Image.open(patch_copy)
-            img.save('outputs/patch_' + str(i_step) + '.png')
+            self.optimizer.step()
+            self.optimizer.zero_grad(set_to_none=True)
+            self._patch.data.clamp_(0, 1)
+
+            avg_loss = epi_loss / self.batch_size
+            self.writer.add_scalar(
+                'Average Loss', avg_loss, global_step=i_step)
+
+            # save patch every n iterations
+            if (i_step + 1) % 1 == 0:
+                patch_copy = self._patch.detach().clone()
+                patch_copy = TF.to_pil_image(patch_copy[0].cpu())
+                patch_copy.save('outputs/patch_' + str(i_step) + '.png')
+
+                # save New_batch too
+                New_batch_copy = New_batch.detach().clone()
+                New_batch_copy = TF.to_pil_image(New_batch_copy[0].cpu())
+                New_batch_copy.save('outputs/x_' + str(i_step) + '.png')
+
+        self.writer.close()
+        save_tensor_to_image(self._patch, 'Patch/patch.png')
+        final_patched = self.apply_patch(og_x)
+        save_tensor_to_image(final_patched, 'Patch/final_patched.png')
 
 
 class max_pro(torch.nn.Module):
-    def __init__(self, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
+    def __init__(self, model, num_cat, target_ID):
 
-    def foward(self):
-        outputs = self.estimator.model(x)
+        super(max_pro, self).__init__()
+        self.model = model
+        self.num_cat = num_cat
+        self.target_ID = target_ID
 
-        for i in range(len(outputs)):
-            # reshape outputs to [batch, grid, 5 + num classes]
-            shape = outputs[i].shape
-            outputs[i] = outputs[i].reshape(
-                shape[0], shape[1] * shape[2] * shape[3], shape[4])
-        all_outputs = torch.cat(outputs, axis=1)
+    def forward(self, x):
+        outputs = self.model(x)
 
-        class_confidence = outputs[:, :, 5:5 + self.num_cat]
+        if len(outputs) == 3:
+            for i in range(len(outputs)):
+                # reshape outputs to [batch, grid, 5 + num classes]
+                shape = outputs[i].shape
+                outputs[i] = outputs[i].reshape(
+                    shape[0], shape[1] * shape[2] * shape[3], shape[4])
+            all_outputs = torch.cat(outputs, axis=1)
+        else:
+            all_outputs = outputs[0]
+
+        class_confidence = all_outputs[:, :, 5:5 + self.num_cat]
         class_confidence = torch.softmax(class_confidence, dim=2)
-        class_confidence = class_confidence[:, :, target_ID]
+        class_confidence = class_confidence[:, :, self.target_ID]
 
         max_prob = torch.max(class_confidence, dim=1)[0]
         return max_prob
+
+
+def save_tensor_to_image(tensor, filename):
+    tensor = tensor.detach().clone()
+    if len(tensor.shape) == 4:
+        tensor = tensor.squeeze(0)
+    tensor = TF.to_pil_image(tensor)
+    tensor.save(filename)

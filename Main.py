@@ -12,6 +12,7 @@ import coloredlogs
 from tqdm.auto import trange
 
 from NewPatchGen import NewPatchGen
+from NewPatchGen import save_tensor_to_image
 
 import math
 import random
@@ -72,7 +73,7 @@ def main(conf: DictConfig):  # conf: DictConfig
     patch_location = conf.patch_location
     sample_size = conf.sample_size
 
-    img = Image.open('/Users/dayuzhang/Documents/carlaAttack/Assets/New.png')
+    img = Image.open('/Users/dayuzhang/Documents/NewPatchGen/Assets/New.png')
     img = img.rotate(180)
 
     import os
@@ -112,13 +113,14 @@ def main(conf: DictConfig):  # conf: DictConfig
     bk = cv2.bitwise_or(noise, noise, mask=mask)
     final = cv2.bitwise_or(fg, bk)
     cv2.imwrite('Patch/noisy.jpeg', cv2.cvtColor(final, cv2.COLOR_RGB2BGR))
-    final_reshape = final.transpose((2, 0, 1))
 
+    final_reshape = final.transpose((2, 0, 1))
     image = np.stack([final_reshape], axis=0).astype(np.float32)
+    image = image / 255.0
     x = image.copy()
 
     ap = NewPatchGen(
-        estimator=model,
+        model=model,
         patch_shape=patch_shape,
         patch_location=patch_location,
         learning_rate=learning_rate,
@@ -128,22 +130,6 @@ def main(conf: DictConfig):  # conf: DictConfig
     )
 
     patch = ap.generate(x=x)
-
-    # im = Image.fromarray(patch.transpose(1, 2, 0).astype(np.uint8))
-    # im.save("Patch/Patch.jpeg")
-    # print("Patch saved")
-
-    # patched_image = ap.apply_patch(red_image)
-    # im = Image.fromarray(patched_image[0].transpose(1, 2, 0).astype(np.uint8))
-    # im.save("Patch/Patched_image.jpeg")
-
-    # patched_image = cv2.imread("Patch/Patched_image.jpeg")
-    # crop = patched_image[rect_y:rect_y + rect_h, rect_x:rect_x + rect_w]
-    # cv2.imwrite("Patch/Patched_image_crop.jpeg", crop)
-
-    # cv2.imwrite("Patch/Patched_image_rotate.jpeg",
-    #             cv2.rotate(crop, cv2.ROTATE_180))
-    # print("Patched image saved")
 
 
 if __name__ == '__main__':
