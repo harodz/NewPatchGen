@@ -1,0 +1,3 @@
+- Put the uasset file into the content browser: Content/Carla/Static/Building
+- Change the Static Mesh to "SM_STOP_v02_STOP"
+- Change the materials to "STOP_TEX"
