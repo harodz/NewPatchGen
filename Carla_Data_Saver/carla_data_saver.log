@@ -1,0 +1,357 @@
+[2023-03-20 04:20:18,491][__main__][INFO] - listening to server localhost:2000
+[2023-03-20 04:20:18,523][__main__][INFO] - carla:
+  host: localhost
+  port: 2000
+  timeout: 30
+  sync:
+    fps: 10
+    timeout: 30
+  seed: 30
+  townmap: Town10HD_Opt
+  traffic_manager_port: 8000
+  retry: 10
+  texture: /home/d99zhang/PycharmProjects/carlaAttack/New.png
+output_dir: _out
+max_frames: 10
+weather:
+  cloudiness: 30.0
+  precipitation: 60.0
+  precipitation_deposits: 50.0
+  wind_intensity: 0.0
+  sun_azimuth_angle: 0.0
+  sun_altitude_angle: 10.0
+  fog_density: 20.0
+  fog_distance: 0.0
+  wetness: 0.0
+spawn_actors:
+- blueprint:
+    name: walker.pedestrian.*
+    attr:
+      role_name: hero1
+      is_invincible: 'false'
+    speed: 1.4
+  transform:
+    location:
+      x: 39.4
+      'y': 148.0
+      z: 0.6
+    rotation:
+      yaw: -90.0
+  destination_transform:
+    location:
+      x: 39.4
+      'y': 146.0
+      z: 0.6
+- blueprint:
+    name: sensor.camera.rgb
+    attr:
+      image_size_x: '800'
+      image_size_y: '600'
+    speed: 1
+  transform:
+    location:
+      x: 31.0
+      'y': 141.6
+      z: 1.6
+    rotation:
+      yaw: 0.0
+  destination_transform:
+    location:
+      x: 41.0
+      'y': 141.6
+      z: 1.6
+  sensor_motion:
+    jitter_magnitude:
+      x: 0.01
+      'y': 0.001
+      z: 0.01
+
+[2023-03-20 04:20:18,532][__main__][INFO] - CARLA server version: 0.9.14-4-gf14acb257-dirty
+[2023-03-20 04:20:18,532][__main__][INFO] - CARLA client version: 0.9.14-4-gf14acb257-dirty
+[2023-03-20 04:20:23,810][__main__][INFO] - Loading map Town10HD_Opt.
+[2023-03-20 04:20:31,238][__main__][INFO] - Time between ticks: 0.03333333507180214 and Delta seconds: 0.03333333333333333
+[2023-03-20 04:20:31,241][__main__][INFO] - Setting weather.
+[2023-03-20 04:20:31,261][__main__][INFO] - Selected ActorBlueprint(id=walker.pedestrian.0036,tags=[0036, walker, pedestrian]) blueprint from: [ActorBlueprint(id=walker.pedestrian.0013,tags=[0013, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0027,tags=[0027, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0008,tags=[walker, 0008, pedestrian]), ActorBlueprint(id=walker.pedestrian.0006,tags=[0006, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0035,tags=[0035, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0001,tags=[0001, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0002,tags=[0002, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0003,tags=[0003, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0004,tags=[0004, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0011,tags=[0011, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0037,tags=[walker, 0037, pedestrian]), ActorBlueprint(id=walker.pedestrian.0005,tags=[0005, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0009,tags=[0009, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0010,tags=[0010, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0045,tags=[0045, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0015,tags=[walker, 0015, pedestrian]), ActorBlueprint(id=walker.pedestrian.0016,tags=[0016, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0030,tags=[0030, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0046,tags=[0046, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0038,tags=[0038, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0041,tags=[0041, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0043,tags=[walker, 0043, pedestrian]), ActorBlueprint(id=walker.pedestrian.0042,tags=[0042, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0044,tags=[0044, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0020,tags=[walker, 0020, pedestrian]), ActorBlueprint(id=walker.pedestrian.0039,tags=[walker, 0039, pedestrian]), ActorBlueprint(id=walker.pedestrian.0022,tags=[walker, 0022, pedestrian]), ActorBlueprint(id=walker.pedestrian.0040,tags=[walker, 0040, pedestrian]), ActorBlueprint(id=walker.pedestrian.0033,tags=[0033, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0028,tags=[0028, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0047,tags=[0047, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0048,tags=[0048, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0049,tags=[0049, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0007,tags=[0007, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0036,tags=[0036, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0031,tags=[0031, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0029,tags=[0029, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0014,tags=[0014, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0026,tags=[0026, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0012,tags=[0012, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0025,tags=[0025, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0024,tags=[0024, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0034,tags=[walker, 0034, pedestrian]), ActorBlueprint(id=walker.pedestrian.0017,tags=[0017, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0021,tags=[0021, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0019,tags=[0019, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0023,tags=[0023, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0032,tags=[walker, 0032, pedestrian]), ActorBlueprint(id=walker.pedestrian.0018,tags=[0018, walker, pedestrian])]
+[2023-03-20 04:20:31,267][__main__][INFO] - Config: {'blueprint': {'name': 'walker.pedestrian.*', 'attr': {'role_name': 'hero1', 'is_invincible': 'false'}, 'speed': 1.4}, 'transform': {'location': {'x': 39.4, 'y': 148.0, 'z': 0.6}, 'rotation': {'yaw': -90.0}}, 'destination_transform': {'location': {'x': 39.4, 'y': 146.0, 'z': 0.6}}}
+[2023-03-20 04:20:31,899][__main__][INFO] - Spawned actor: walker.pedestrian.0036 with id: 321
+[2023-03-20 04:20:31,901][__main__][INFO] - Found actor : walker.pedestrian.0036 with id: 321 to enable autopilot
+[2023-03-20 04:20:31,910][__main__][INFO] - Selected ActorBlueprint(id=sensor.camera.rgb,tags=[rgb, sensor, camera]) blueprint from: [ActorBlueprint(id=sensor.camera.rgb,tags=[rgb, sensor, camera])]
+[2023-03-20 04:20:31,915][__main__][INFO] - Config: {'blueprint': {'name': 'sensor.camera.rgb', 'attr': {'image_size_x': '800', 'image_size_y': '600'}, 'speed': 1}, 'transform': {'location': {'x': 31.0, 'y': 141.6, 'z': 1.6}, 'rotation': {'yaw': 0.0}}, 'destination_transform': {'location': {'x': 41.0, 'y': 141.6, 'z': 1.6}}, 'sensor_motion': {'jitter_magnitude': {'x': 0.01, 'y': 0.001, 'z': 0.01}}}
+[2023-03-20 04:20:31,937][__main__][INFO] - Spawned actor: sensor.camera.rgb with id: 323
+[2023-03-20 04:20:31,941][__main__][INFO] - Retrieved sensor motion dict after spawning all actors{323: {'jitter_bound_min': <carla.libcarla.Location object at 0x7fecc1f318b0>, 'jitter_bound_max': <carla.libcarla.Location object at 0x7fecc1f318f0>, 'jitter_magnitude': {'x': 0.01, 'y': 0.001, 'z': 0.01}, 'linear_motion_step': <carla.libcarla.Location object at 0x7fecc1f31930>, 'linear_motion_time': 10.0, 'destination': <carla.libcarla.Location object at 0x7fecc1f31970>}}
+[2023-03-20 04:20:32,200][__main__][INFO] - Init sensors: (<carla.libcarla.ServerSideSensor object at 0x7fecc1f20f90>,), kwargs: 30
+[2023-03-20 04:20:33,271][__main__][INFO] - Making queue for sensor: Actor(id=323, type=sensor.camera.rgb)
+[2023-03-20 04:20:33,273][root][INFO] - Begin sync_mode.tick
+[2023-03-20 04:20:33,328][__main__][INFO] - Snapshot: WorldSnapshot(frame=983) and length of sensor_data: 1
+[2023-03-20 04:20:33,783][__main__][INFO] - Stepping sensor with Sensor ID: 323
+[2023-03-20 04:20:34,473][root][INFO] - Begin sync_mode.tick
+[2023-03-20 04:20:34,540][__main__][INFO] - Snapshot: WorldSnapshot(frame=984) and length of sensor_data: 1
+[2023-03-20 04:20:34,991][__main__][INFO] - Stepping sensor with Sensor ID: 323
+[2023-03-20 04:20:35,675][root][INFO] - Begin sync_mode.tick
+[2023-03-20 04:20:35,739][__main__][INFO] - Snapshot: WorldSnapshot(frame=985) and length of sensor_data: 1
+[2023-03-20 04:20:36,188][__main__][INFO] - Stepping sensor with Sensor ID: 323
+[2023-03-20 04:20:36,869][root][INFO] - Begin sync_mode.tick
+[2023-03-20 04:20:36,936][__main__][INFO] - Snapshot: WorldSnapshot(frame=986) and length of sensor_data: 1
+[2023-03-20 04:20:37,391][__main__][INFO] - Stepping sensor with Sensor ID: 323
+[2023-03-20 04:20:38,070][root][INFO] - Begin sync_mode.tick
+[2023-03-20 04:20:38,129][__main__][INFO] - Snapshot: WorldSnapshot(frame=987) and length of sensor_data: 1
+[2023-03-20 04:20:38,581][__main__][INFO] - Stepping sensor with Sensor ID: 323
+[2023-03-20 04:20:39,261][root][INFO] - Begin sync_mode.tick
+[2023-03-20 04:20:39,331][__main__][INFO] - Snapshot: WorldSnapshot(frame=988) and length of sensor_data: 1
+[2023-03-20 04:20:39,780][__main__][INFO] - Stepping sensor with Sensor ID: 323
+[2023-03-20 04:20:40,461][root][INFO] - Begin sync_mode.tick
+[2023-03-20 04:20:40,523][__main__][INFO] - Snapshot: WorldSnapshot(frame=989) and length of sensor_data: 1
+[2023-03-20 04:20:40,974][__main__][INFO] - Stepping sensor with Sensor ID: 323
+[2023-03-20 04:20:41,657][root][INFO] - Begin sync_mode.tick
+[2023-03-20 04:20:41,720][__main__][INFO] - Snapshot: WorldSnapshot(frame=990) and length of sensor_data: 1
+[2023-03-20 04:20:42,169][__main__][INFO] - Stepping sensor with Sensor ID: 323
+[2023-03-20 04:20:42,851][root][INFO] - Begin sync_mode.tick
+[2023-03-20 04:20:42,911][__main__][INFO] - Snapshot: WorldSnapshot(frame=991) and length of sensor_data: 1
+[2023-03-20 04:20:43,367][__main__][INFO] - Stepping sensor with Sensor ID: 323
+[2023-03-20 04:20:44,051][root][INFO] - Begin sync_mode.tick
+[2023-03-20 04:20:44,108][__main__][INFO] - Snapshot: WorldSnapshot(frame=992) and length of sensor_data: 1
+[2023-03-20 04:20:44,558][__main__][INFO] - Stepping sensor with Sensor ID: 323
+[2023-03-20 04:20:45,245][root][INFO] - Begin sync_mode.tick
+[2023-03-20 04:20:45,245][__main__][INFO] - Max frames, 10, reached. Exiting...
+[2023-03-20 04:20:45,270][__main__][INFO] - Destroying actors
+[2023-03-20 12:27:11,005][__main__][INFO] - listening to server localhost:2000
+[2023-03-20 12:27:11,038][__main__][INFO] - carla:
+  host: localhost
+  port: 2000
+  timeout: 30
+  sync:
+    fps: 10
+    timeout: 30
+  seed: 30
+  townmap: Town10HD_Opt
+  traffic_manager_port: 8000
+  retry: 10
+  texture: /home/d99zhang/PycharmProjects/carlaAttack/result.jpeg
+output_dir: _out2
+max_frames: 10
+weather:
+  cloudiness: 30.0
+  precipitation: 60.0
+  precipitation_deposits: 50.0
+  wind_intensity: 0.0
+  sun_azimuth_angle: 0.0
+  sun_altitude_angle: 10.0
+  fog_density: 20.0
+  fog_distance: 0.0
+  wetness: 0.0
+spawn_actors:
+- blueprint:
+    name: walker.pedestrian.*
+    attr:
+      role_name: hero1
+      is_invincible: 'false'
+    speed: 1.4
+  transform:
+    location:
+      x: 39.4
+      'y': 148.0
+      z: 0.6
+    rotation:
+      yaw: -90.0
+  destination_transform:
+    location:
+      x: 39.4
+      'y': 146.0
+      z: 0.6
+- blueprint:
+    name: sensor.camera.rgb
+    attr:
+      image_size_x: '800'
+      image_size_y: '600'
+    speed: 1
+  transform:
+    location:
+      x: 31.0
+      'y': 141.6
+      z: 1.6
+    rotation:
+      yaw: 0.0
+  destination_transform:
+    location:
+      x: 41.0
+      'y': 141.6
+      z: 1.6
+  sensor_motion:
+    jitter_magnitude:
+      x: 0.01
+      'y': 0.001
+      z: 0.01
+
+[2023-03-20 12:27:11,047][__main__][INFO] - CARLA server version: 0.9.14-4-gf14acb257-dirty
+[2023-03-20 12:27:11,047][__main__][INFO] - CARLA client version: 0.9.14-4-gf14acb257-dirty
+[2023-03-20 12:27:16,303][__main__][INFO] - Loading map Town10HD_Opt.
+[2023-03-20 12:27:23,515][__main__][INFO] - Time between ticks: 0.03333333507180214 and Delta seconds: 0.03333333333333333
+[2023-03-20 12:27:23,518][__main__][INFO] - Setting weather.
+[2023-03-20 12:27:23,540][__main__][INFO] - Selected ActorBlueprint(id=walker.pedestrian.0036,tags=[0036, walker, pedestrian]) blueprint from: [ActorBlueprint(id=walker.pedestrian.0013,tags=[0013, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0027,tags=[0027, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0008,tags=[walker, 0008, pedestrian]), ActorBlueprint(id=walker.pedestrian.0006,tags=[0006, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0035,tags=[0035, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0001,tags=[0001, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0002,tags=[0002, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0003,tags=[0003, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0004,tags=[0004, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0011,tags=[0011, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0037,tags=[walker, 0037, pedestrian]), ActorBlueprint(id=walker.pedestrian.0005,tags=[0005, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0009,tags=[0009, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0010,tags=[0010, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0045,tags=[0045, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0015,tags=[walker, 0015, pedestrian]), ActorBlueprint(id=walker.pedestrian.0016,tags=[0016, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0030,tags=[0030, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0046,tags=[0046, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0038,tags=[0038, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0041,tags=[0041, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0043,tags=[walker, 0043, pedestrian]), ActorBlueprint(id=walker.pedestrian.0042,tags=[0042, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0044,tags=[0044, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0020,tags=[walker, 0020, pedestrian]), ActorBlueprint(id=walker.pedestrian.0039,tags=[walker, 0039, pedestrian]), ActorBlueprint(id=walker.pedestrian.0022,tags=[walker, 0022, pedestrian]), ActorBlueprint(id=walker.pedestrian.0040,tags=[walker, 0040, pedestrian]), ActorBlueprint(id=walker.pedestrian.0033,tags=[0033, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0028,tags=[0028, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0047,tags=[0047, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0048,tags=[0048, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0049,tags=[0049, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0007,tags=[0007, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0036,tags=[0036, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0031,tags=[0031, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0029,tags=[0029, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0014,tags=[0014, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0026,tags=[0026, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0012,tags=[0012, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0025,tags=[0025, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0024,tags=[0024, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0034,tags=[walker, 0034, pedestrian]), ActorBlueprint(id=walker.pedestrian.0017,tags=[0017, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0021,tags=[0021, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0019,tags=[0019, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0023,tags=[0023, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0032,tags=[walker, 0032, pedestrian]), ActorBlueprint(id=walker.pedestrian.0018,tags=[0018, walker, pedestrian])]
+[2023-03-20 12:27:23,546][__main__][INFO] - Config: {'blueprint': {'name': 'walker.pedestrian.*', 'attr': {'role_name': 'hero1', 'is_invincible': 'false'}, 'speed': 1.4}, 'transform': {'location': {'x': 39.4, 'y': 148.0, 'z': 0.6}, 'rotation': {'yaw': -90.0}}, 'destination_transform': {'location': {'x': 39.4, 'y': 146.0, 'z': 0.6}}}
+[2023-03-20 12:27:24,163][__main__][INFO] - Spawned actor: walker.pedestrian.0036 with id: 347
+[2023-03-20 12:27:24,166][__main__][INFO] - Found actor : walker.pedestrian.0036 with id: 347 to enable autopilot
+[2023-03-20 12:27:24,175][__main__][INFO] - Selected ActorBlueprint(id=sensor.camera.rgb,tags=[rgb, sensor, camera]) blueprint from: [ActorBlueprint(id=sensor.camera.rgb,tags=[rgb, sensor, camera])]
+[2023-03-20 12:27:24,180][__main__][INFO] - Config: {'blueprint': {'name': 'sensor.camera.rgb', 'attr': {'image_size_x': '800', 'image_size_y': '600'}, 'speed': 1}, 'transform': {'location': {'x': 31.0, 'y': 141.6, 'z': 1.6}, 'rotation': {'yaw': 0.0}}, 'destination_transform': {'location': {'x': 41.0, 'y': 141.6, 'z': 1.6}}, 'sensor_motion': {'jitter_magnitude': {'x': 0.01, 'y': 0.001, 'z': 0.01}}}
+[2023-03-20 12:27:24,198][__main__][INFO] - Spawned actor: sensor.camera.rgb with id: 349
+[2023-03-20 12:27:24,203][__main__][INFO] - Retrieved sensor motion dict after spawning all actors{349: {'jitter_bound_min': <carla.libcarla.Location object at 0x7fb6fe1759f0>, 'jitter_bound_max': <carla.libcarla.Location object at 0x7fb6fe175a30>, 'jitter_magnitude': {'x': 0.01, 'y': 0.001, 'z': 0.01}, 'linear_motion_step': <carla.libcarla.Location object at 0x7fb6fe175a70>, 'linear_motion_time': 10.0, 'destination': <carla.libcarla.Location object at 0x7fb6fe175ab0>}}
+[2023-03-20 12:27:24,431][__main__][INFO] - Init sensors: (<carla.libcarla.ServerSideSensor object at 0x7fb6fe1810f0>,), kwargs: 30
+[2023-03-20 12:27:25,471][__main__][INFO] - Making queue for sensor: Actor(id=349, type=sensor.camera.rgb)
+[2023-03-20 12:27:25,472][root][INFO] - Begin sync_mode.tick
+[2023-03-20 12:27:25,525][__main__][INFO] - Snapshot: WorldSnapshot(frame=1006) and length of sensor_data: 1
+[2023-03-20 12:27:25,981][__main__][INFO] - Stepping sensor with Sensor ID: 349
+[2023-03-20 12:27:26,664][root][INFO] - Begin sync_mode.tick
+[2023-03-20 12:27:26,730][__main__][INFO] - Snapshot: WorldSnapshot(frame=1007) and length of sensor_data: 1
+[2023-03-20 12:27:27,186][__main__][INFO] - Stepping sensor with Sensor ID: 349
+[2023-03-20 12:27:27,865][root][INFO] - Begin sync_mode.tick
+[2023-03-20 12:27:27,925][__main__][INFO] - Snapshot: WorldSnapshot(frame=1008) and length of sensor_data: 1
+[2023-03-20 12:27:28,374][__main__][INFO] - Stepping sensor with Sensor ID: 349
+[2023-03-20 12:27:29,054][root][INFO] - Begin sync_mode.tick
+[2023-03-20 12:27:29,112][__main__][INFO] - Snapshot: WorldSnapshot(frame=1009) and length of sensor_data: 1
+[2023-03-20 12:27:29,564][__main__][INFO] - Stepping sensor with Sensor ID: 349
+[2023-03-20 12:27:30,242][root][INFO] - Begin sync_mode.tick
+[2023-03-20 12:27:30,302][__main__][INFO] - Snapshot: WorldSnapshot(frame=1010) and length of sensor_data: 1
+[2023-03-20 12:27:30,761][__main__][INFO] - Stepping sensor with Sensor ID: 349
+[2023-03-20 12:27:31,444][root][INFO] - Begin sync_mode.tick
+[2023-03-20 12:27:31,500][__main__][INFO] - Snapshot: WorldSnapshot(frame=1011) and length of sensor_data: 1
+[2023-03-20 12:27:31,957][__main__][INFO] - Stepping sensor with Sensor ID: 349
+[2023-03-20 12:27:32,634][root][INFO] - Begin sync_mode.tick
+[2023-03-20 12:27:32,689][__main__][INFO] - Snapshot: WorldSnapshot(frame=1012) and length of sensor_data: 1
+[2023-03-20 12:27:33,141][__main__][INFO] - Stepping sensor with Sensor ID: 349
+[2023-03-20 12:27:33,818][root][INFO] - Begin sync_mode.tick
+[2023-03-20 12:27:33,876][__main__][INFO] - Snapshot: WorldSnapshot(frame=1013) and length of sensor_data: 1
+[2023-03-20 12:27:34,327][__main__][INFO] - Stepping sensor with Sensor ID: 349
+[2023-03-20 12:27:35,002][root][INFO] - Begin sync_mode.tick
+[2023-03-20 12:27:35,045][__main__][INFO] - Snapshot: WorldSnapshot(frame=1014) and length of sensor_data: 1
+[2023-03-20 12:27:35,502][__main__][INFO] - Stepping sensor with Sensor ID: 349
+[2023-03-20 12:27:36,186][root][INFO] - Begin sync_mode.tick
+[2023-03-20 12:27:36,250][__main__][INFO] - Snapshot: WorldSnapshot(frame=1015) and length of sensor_data: 1
+[2023-03-20 12:27:36,708][__main__][INFO] - Stepping sensor with Sensor ID: 349
+[2023-03-20 12:27:37,393][root][INFO] - Begin sync_mode.tick
+[2023-03-20 12:27:37,393][__main__][INFO] - Max frames, 10, reached. Exiting...
+[2023-03-20 12:27:37,416][__main__][INFO] - Destroying actors
+[2023-06-05 12:37:39,278][__main__][INFO] - listening to server localhost:2000
+[2023-06-05 12:37:39,296][__main__][INFO] - carla:
+  host: localhost
+  port: 2000
+  timeout: 30
+  sync:
+    fps: 10
+    timeout: 30
+  seed: 30
+  townmap: Town10HD_Opt
+  traffic_manager_port: 8000
+  retry: 10
+  texture: C:\\Users\\Devon\\Project\\carlaAttack\\outputs\\2023-06-05\\11-04-33\\Patch\\Patched_image.jpeg
+output_dir: _out2
+max_frames: 10
+weather:
+  cloudiness: 30.0
+  precipitation: 60.0
+  precipitation_deposits: 50.0
+  wind_intensity: 0.0
+  sun_azimuth_angle: 0.0
+  sun_altitude_angle: 10.0
+  fog_density: 20.0
+  fog_distance: 0.0
+  wetness: 0.0
+spawn_actors:
+- blueprint:
+    name: walker.pedestrian.*
+    attr:
+      role_name: hero1
+      is_invincible: 'false'
+    speed: 1.4
+  transform:
+    location:
+      x: 39.4
+      'y': 148.0
+      z: 0.6
+    rotation:
+      yaw: -90.0
+  destination_transform:
+    location:
+      x: 39.4
+      'y': 146.0
+      z: 0.6
+- blueprint:
+    name: sensor.camera.rgb
+    attr:
+      image_size_x: '800'
+      image_size_y: '600'
+    speed: 1
+  transform:
+    location:
+      x: 31.0
+      'y': 141.6
+      z: 1.6
+    rotation:
+      yaw: 0.0
+  destination_transform:
+    location:
+      x: 41.0
+      'y': 141.6
+      z: 1.6
+  sensor_motion:
+    jitter_magnitude:
+      x: 0.01
+      'y': 0.001
+      z: 0.01
+
+[2023-06-05 12:37:41,355][__main__][INFO] - CARLA server version: 0.9.14-4-gf14acb257
+[2023-06-05 12:37:41,356][__main__][INFO] - CARLA client version: 0.9.14-4-gf14acb257
+[2023-06-05 12:37:41,538][__main__][INFO] - Loading map Town10HD_Opt.
+[2023-06-05 12:37:49,178][__main__][INFO] - CARLA connection failed on attempt 1 of 10
+[2023-06-05 12:37:56,230][__main__][INFO] - CARLA server version: 0.9.14-4-gf14acb257
+[2023-06-05 12:37:56,230][__main__][INFO] - CARLA client version: 0.9.14-4-gf14acb257
+[2023-06-05 12:37:57,291][__main__][INFO] - Loading map Town10HD_Opt.
+[2023-06-05 12:38:04,043][__main__][INFO] - CARLA connection failed on attempt 2 of 10
+[2023-06-05 12:38:11,095][__main__][INFO] - CARLA server version: 0.9.14-4-gf14acb257
+[2023-06-05 12:38:11,095][__main__][INFO] - CARLA client version: 0.9.14-4-gf14acb257
+[2023-06-05 12:38:12,148][__main__][INFO] - Loading map Town10HD_Opt.
+[2023-06-05 12:38:19,133][__main__][INFO] - CARLA connection failed on attempt 3 of 10
+[2023-06-05 12:38:26,191][__main__][INFO] - CARLA server version: 0.9.14-4-gf14acb257
+[2023-06-05 12:38:26,192][__main__][INFO] - CARLA client version: 0.9.14-4-gf14acb257
+[2023-06-05 12:38:27,244][__main__][INFO] - Loading map Town10HD_Opt.
+[2023-06-05 12:38:33,843][__main__][INFO] - CARLA connection failed on attempt 4 of 10
+[2023-06-05 12:38:40,901][__main__][INFO] - CARLA server version: 0.9.14-4-gf14acb257
+[2023-06-05 12:38:40,902][__main__][INFO] - CARLA client version: 0.9.14-4-gf14acb257
+[2023-06-05 12:38:41,954][__main__][INFO] - Loading map Town10HD_Opt.
+[2023-06-05 12:38:48,970][__main__][INFO] - CARLA connection failed on attempt 5 of 10
+[2023-06-05 12:38:56,029][__main__][INFO] - CARLA server version: 0.9.14-4-gf14acb257
+[2023-06-05 12:38:56,030][__main__][INFO] - CARLA client version: 0.9.14-4-gf14acb257
+[2023-06-05 12:38:57,078][__main__][INFO] - Loading map Town10HD_Opt.
+[2023-06-05 12:39:03,656][__main__][INFO] - CARLA connection failed on attempt 6 of 10
+[2023-06-05 12:39:10,708][__main__][INFO] - CARLA server version: 0.9.14-4-gf14acb257
+[2023-06-05 12:39:10,708][__main__][INFO] - CARLA client version: 0.9.14-4-gf14acb257
+[2023-06-05 12:39:11,828][__main__][INFO] - Loading map Town10HD_Opt.
+[2023-06-05 12:39:18,508][__main__][INFO] - CARLA connection failed on attempt 7 of 10
+[2023-06-05 12:39:25,557][__main__][INFO] - CARLA server version: 0.9.14-4-gf14acb257
+[2023-06-05 12:39:25,557][__main__][INFO] - CARLA client version: 0.9.14-4-gf14acb257
+[2023-06-05 12:39:26,606][__main__][INFO] - Loading map Town10HD_Opt.
+[2023-06-05 12:39:33,632][__main__][INFO] - CARLA connection failed on attempt 8 of 10
+[2023-06-05 12:39:40,685][__main__][INFO] - CARLA server version: 0.9.14-4-gf14acb257
+[2023-06-05 12:39:40,685][__main__][INFO] - CARLA client version: 0.9.14-4-gf14acb257
+[2023-06-05 12:39:41,732][__main__][INFO] - Loading map Town10HD_Opt.
+[2023-06-05 12:39:48,292][__main__][INFO] - CARLA connection failed on attempt 9 of 10
+[2023-06-05 12:39:55,348][__main__][INFO] - CARLA server version: 0.9.14-4-gf14acb257
+[2023-06-05 12:39:55,349][__main__][INFO] - CARLA client version: 0.9.14-4-gf14acb257
+[2023-06-05 12:39:56,395][__main__][INFO] - Loading map Town10HD_Opt.
+[2023-06-05 12:40:03,208][__main__][INFO] - CARLA connection failed on attempt 10 of 10
+[2023-06-05 12:40:08,214][__main__][INFO] - Setting weather.
+[2023-06-05 12:40:08,239][__main__][INFO] - Selected ActorBlueprint(id=walker.pedestrian.0036,tags=[walker, 0036, pedestrian]) blueprint from: [ActorBlueprint(id=walker.pedestrian.0037,tags=[0037, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0028,tags=[0028, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0038,tags=[walker, pedestrian, 0038]), ActorBlueprint(id=walker.pedestrian.0027,tags=[walker, pedestrian, 0027]), ActorBlueprint(id=walker.pedestrian.0024,tags=[walker, pedestrian, 0024]), ActorBlueprint(id=walker.pedestrian.0046,tags=[0046, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0021,tags=[walker, 0021, pedestrian]), ActorBlueprint(id=walker.pedestrian.0013,tags=[walker, pedestrian, 0013]), ActorBlueprint(id=walker.pedestrian.0031,tags=[walker, pedestrian, 0031]), ActorBlueprint(id=walker.pedestrian.0010,tags=[walker, 0010, pedestrian]), ActorBlueprint(id=walker.pedestrian.0007,tags=[walker, pedestrian, 0007]), ActorBlueprint(id=walker.pedestrian.0001,tags=[walker, pedestrian, 0001]), ActorBlueprint(id=walker.pedestrian.0002,tags=[0002, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0003,tags=[walker, 0003, pedestrian]), ActorBlueprint(id=walker.pedestrian.0004,tags=[walker, pedestrian, 0004]), ActorBlueprint(id=walker.pedestrian.0005,tags=[walker, pedestrian, 0005]), ActorBlueprint(id=walker.pedestrian.0006,tags=[walker, pedestrian, 0006]), ActorBlueprint(id=walker.pedestrian.0008,tags=[walker, pedestrian, 0008]), ActorBlueprint(id=walker.pedestrian.0009,tags=[walker, pedestrian, 0009]), ActorBlueprint(id=walker.pedestrian.0011,tags=[0011, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0012,tags=[walker, pedestrian, 0012]), ActorBlueprint(id=walker.pedestrian.0014,tags=[walker, pedestrian, 0014]), ActorBlueprint(id=walker.pedestrian.0015,tags=[walker, pedestrian, 0015]), ActorBlueprint(id=walker.pedestrian.0016,tags=[walker, pedestrian, 0016]), ActorBlueprint(id=walker.pedestrian.0017,tags=[walker, pedestrian, 0017]), ActorBlueprint(id=walker.pedestrian.0018,tags=[walker, 0018, pedestrian]), ActorBlueprint(id=walker.pedestrian.0019,tags=[0019, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0020,tags=[0020, walker, pedestrian]), ActorBlueprint(id=walker.pedestrian.0022,tags=[walker, pedestrian, 0022]), ActorBlueprint(id=walker.pedestrian.0023,tags=[walker, pedestrian, 0023]), ActorBlueprint(id=walker.pedestrian.0025,tags=[walker, pedestrian, 0025]), ActorBlueprint(id=walker.pedestrian.0026,tags=[walker, pedestrian, 0026]), ActorBlueprint(id=walker.pedestrian.0039,tags=[walker, pedestrian, 0039]), ActorBlueprint(id=walker.pedestrian.0029,tags=[walker, 0029, pedestrian]), ActorBlueprint(id=walker.pedestrian.0036,tags=[walker, 0036, pedestrian]), ActorBlueprint(id=walker.pedestrian.0030,tags=[walker, pedestrian, 0030]), ActorBlueprint(id=walker.pedestrian.0032,tags=[walker, pedestrian, 0032]), ActorBlueprint(id=walker.pedestrian.0033,tags=[walker, pedestrian, 0033]), ActorBlueprint(id=walker.pedestrian.0034,tags=[walker, pedestrian, 0034]), ActorBlueprint(id=walker.pedestrian.0035,tags=[walker, pedestrian, 0035]), ActorBlueprint(id=walker.pedestrian.0040,tags=[walker, pedestrian, 0040]), ActorBlueprint(id=walker.pedestrian.0041,tags=[walker, pedestrian, 0041]), ActorBlueprint(id=walker.pedestrian.0042,tags=[walker, pedestrian, 0042]), ActorBlueprint(id=walker.pedestrian.0043,tags=[walker, pedestrian, 0043]), ActorBlueprint(id=walker.pedestrian.0044,tags=[walker, pedestrian, 0044]), ActorBlueprint(id=walker.pedestrian.0045,tags=[walker, pedestrian, 0045]), ActorBlueprint(id=walker.pedestrian.0047,tags=[walker, 0047, pedestrian]), ActorBlueprint(id=walker.pedestrian.0048,tags=[walker, pedestrian, 0048]), ActorBlueprint(id=walker.pedestrian.0049,tags=[walker, pedestrian, 0049])]
+[2023-06-05 12:40:08,245][__main__][INFO] - Config: {'blueprint': {'name': 'walker.pedestrian.*', 'attr': {'role_name': 'hero1', 'is_invincible': 'false'}, 'speed': 1.4}, 'transform': {'location': {'x': 39.4, 'y': 148.0, 'z': 0.6}, 'rotation': {'yaw': -90.0}}, 'destination_transform': {'location': {'x': 39.4, 'y': 146.0, 'z': 0.6}}}
+[2023-06-05 12:40:08,851][__main__][INFO] - Spawned actor: walker.pedestrian.0036 with id: 254
+[2023-06-05 12:40:08,853][__main__][INFO] - Found actor : walker.pedestrian.0036 with id: 254 to enable autopilot
+[2023-06-05 12:40:08,856][__main__][INFO] - Selected ActorBlueprint(id=sensor.camera.rgb,tags=[sensor, camera, rgb]) blueprint from: [ActorBlueprint(id=sensor.camera.rgb,tags=[sensor, camera, rgb])]
+[2023-06-05 12:40:08,859][__main__][INFO] - Config: {'blueprint': {'name': 'sensor.camera.rgb', 'attr': {'image_size_x': '800', 'image_size_y': '600'}, 'speed': 1}, 'transform': {'location': {'x': 31.0, 'y': 141.6, 'z': 1.6}, 'rotation': {'yaw': 0.0}}, 'destination_transform': {'location': {'x': 41.0, 'y': 141.6, 'z': 1.6}}, 'sensor_motion': {'jitter_magnitude': {'x': 0.01, 'y': 0.001, 'z': 0.01}}}
+[2023-06-05 12:40:08,890][__main__][INFO] - Spawned actor: sensor.camera.rgb with id: 256
+[2023-06-05 12:40:08,892][__main__][INFO] - Retrieved sensor motion dict after spawning all actors{256: {'jitter_bound_min': <carla.libcarla.Location object at 0x0000027250218F40>, 'jitter_bound_max': <carla.libcarla.Location object at 0x000002725021A980>, 'jitter_magnitude': {'x': 0.01, 'y': 0.001, 'z': 0.01}, 'linear_motion_step': <carla.libcarla.Location object at 0x00000272507C0EF0>, 'linear_motion_time': 10.0, 'destination': <carla.libcarla.Location object at 0x000002725021B330>}}
+[2023-06-05 12:40:09,301][__main__][ERROR] - 'NoneType' object has no attribute 'get_world'
+Traceback (most recent call last):
+  File "C:\Users\Devon\Project\carlaAttack\carla_data_saver.py", line 616, in data_saver_loop
+    with CarlaSyncMode(client, *sensor_list, tm_port=tm_port, tm_seed=conf.carla.seed, fps=fps, respawn=respawn) as sync_mode:
+  File "C:\Users\Devon\Project\carlaAttack\carla_data_saver.py", line 46, in __init__
+    self.world = client.get_world()
+AttributeError: 'NoneType' object has no attribute 'get_world'
+[2023-06-05 12:40:09,303][__main__][INFO] - Destroying actors

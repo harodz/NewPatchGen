@@ -18,6 +18,9 @@ import math
 import random
 from typing import Dict, List, Optional, Tuple, Union, TYPE_CHECKING
 
+import os
+import sys
+
 
 logger = logging.getLogger(__name__)
 coloredlogs.install(level=logging.INFO)
@@ -46,7 +49,7 @@ OmegaConf.register_new_resolver('tuple', resolve_tuple)
 # Initiate a new session
 
 
-@hydra.main(config_path="configs", config_name="PatchGen_copy")
+@hydra.main(config_path="configs", config_name="PatchGen")
 def main(conf: DictConfig):  # conf: DictConfig
     logger.info(OmegaConf.to_yaml(conf))
 
@@ -61,7 +64,7 @@ def main(conf: DictConfig):  # conf: DictConfig
     '''
     model = torch.hub.load("ultralytics/yolov5", "yolov5s", autoshape=False)
 
-    print(next(model.parameters()).device)
+    logger.info('Device: ' + str(next(model.parameters()).device))
 
     '''
     Attack
@@ -71,9 +74,18 @@ def main(conf: DictConfig):  # conf: DictConfig
     max_iter = conf.max_iter
     patch_shape = conf.patch_shape
     patch_location = conf.patch_location
-    sample_size = conf.sample_size
+    ksize_range = conf.ksize_range
+    logging_frequency = conf.logging_frequency
 
-    img = Image.open('/Users/dayuzhang/Documents/NewPatchGen/Assets/New.png')
+    if os.name == 'nt':
+        # windows
+        img = Image.open(
+            'C:\\Users\\Devon\\Project\\NewPatchGen\\Assets\\New.png')
+    elif sys.platform == 'darwin':
+        # mac
+        img = Image.open(
+            '/Users/dayuzhang/Documents/NewPatchGen/Assets/New.png')
+
     img = img.rotate(180)
 
     import os
@@ -125,11 +137,36 @@ def main(conf: DictConfig):  # conf: DictConfig
         patch_location=patch_location,
         learning_rate=learning_rate,
         max_iter=max_iter,
-        sample_size=sample_size,
         batch_size=batch_size,
+        ksize_range=ksize_range,
+        logging_frequency=logging_frequency
     )
 
     patch = ap.generate(x=x)
+
+    # add patch to the red image and then remove the red background to get back to the original image
+    patch_img = Image.open('Patch/patch.png')
+    x_1, y_1 = patch_location
+    x_2, y_2 = x_1 + patch_shape[1], y_1 + patch_shape[2]
+
+    red_img[x_1:x_2, y_1:y_2] = patch_img
+
+    crop = red_img[rect_y:rect_y + rect_h, rect_x:rect_x + rect_w]
+    texture = Image.fromarray(crop.astype(np.uint8))
+    texture = texture.rotate(180)
+    texture.save('Patch/texture.png')
+
+    # detect the patch
+    model_pt = yolov5.load(
+        'C:\\Users\\Devon\\Project\\NewPatchGen\\Assets/yolov5s.pt')
+    img_path = 'Patch/final_patched.png'
+    results = model_pt(img_path)
+
+    # Render the results on the original image
+    img_with_boxes = results.render()[0]
+    img_with_boxes_rgb = cv2.cvtColor(img_with_boxes, cv2.COLOR_BGR2RGB)
+    save_dir = 'Patch/final_patched_detected.png'
+    cv2.imwrite(save_dir, img_with_boxes_rgb)
 
 
 if __name__ == '__main__':

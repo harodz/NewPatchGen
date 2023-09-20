@@ -25,12 +25,14 @@ class NewPatchGen():
         num_cat: int = 80,
         patch_shape: Tuple[int, int, int] = (3, 40, 40),
         patch_location: Tuple[int, int] = (0, 0),
-        sample_size: int = 1,
         learning_rate: float = 5.0,
         max_iter: int = 500,
         batch_size: int = 16,
-        target_ID: int = 11,
+        target_ID: int = 11,  # Target ID = 11 (stop sign index in COCO)
         verbose: bool = True,
+        logging_frequency: int = 5,  # log every n iterations
+        # range of kernel size for gaussian blur
+        ksize_range: Tuple[int, int] = (5, 25)
     ):
         self.writer = SummaryWriter(log_dir='./tensorboard_logs')
 
@@ -51,12 +53,14 @@ class NewPatchGen():
 
         self.verbose = verbose
         self.patch_location = patch_location
-        self.sample_size = sample_size
         self.target_ID = target_ID
         self.model = model
 
         self.max_prob = max_pro(
             model=self.model, num_cat=self.num_cat, target_ID=self.target_ID).to(self.device)
+
+        self.logging_frequency = logging_frequency
+        self.ksize_range = ksize_range
 
     def apply_patch(self, x: torch.tensor):
         # Get the height and width of x
@@ -85,11 +89,28 @@ class NewPatchGen():
 
         # Resize to smaller images
 
-        new_size = np.random.randint(320, 640)
+        new_size = np.random.randint(64, 640)
         patched_x = TF.resize(patched_x, [new_size, new_size])
         patched_x = TF.pad(
             patched_x, [(640 - new_size) // 2, (640 - new_size) // 2])
         patched_x = TF.resize(patched_x, [640, 640])
+
+        # Perspective Transform
+        def random_shift(val, shift_range=(-100, 100)):
+            return val + random.uniform(*shift_range)
+
+        # Define source and destination points
+        src_points = [[0, 0], [639, 0], [639, 639], [
+            0, 639]]  # corners of the original image
+        dst_points = [
+            [random_shift(0), random_shift(0)],
+            [random_shift(639), random_shift(0)],
+            [random_shift(639), random_shift(639)],
+            [random_shift(0), random_shift(639)]
+        ]
+
+        patched_x = TF.perspective(
+            patched_x, startpoints=src_points, endpoints=dst_points)
 
         # Adjust Brightness
         brightness_factor = np.random.uniform(0.4, 1)
@@ -97,13 +118,14 @@ class NewPatchGen():
 
         # Add blur:
 
-        ksize = 2 * np.random.randint(0, 25) + 1
+        ksize = 2 * \
+            np.random.randint(self.ksize_range[0], self.ksize_range[1]) + 1
 
         patched_x = TF.gaussian_blur(patched_x, ksize)
 
         # Reduce saturation:
 
-        saturation_factor = np.random.uniform(0.4, 1)
+        saturation_factor = np.random.uniform(0.4, 1.5)
         patched_x = TF.adjust_saturation(patched_x, saturation_factor)
 
         return patched_x
@@ -118,11 +140,9 @@ class NewPatchGen():
         if not isExist:
             os.makedirs('outputs')
 
-        for i_step in trange(self.max_iter, desc="RobustDPatch iteration", disable=not self.verbose):
-            if i_step == 0 or (i_step + 1) % 5 == 0:
-                logger.info("Training Step: %i", i_step + 1)
+        print('Generating Patch...')
 
-            epi_loss = 0
+        for i_step in trange(self.max_iter, desc="RobustDPatch iteration", disable=not self.verbose):
 
             # create a new batch of transformations
             Transformations = []
@@ -136,22 +156,23 @@ class NewPatchGen():
 
             loss = torch.mean(self.max_prob(New_batch))
 
-            epi_loss += loss
             loss.backward()
 
             self.optimizer.step()
             self.optimizer.zero_grad(set_to_none=True)
             self._patch.data.clamp_(0, 1)
 
-            avg_loss = epi_loss / self.batch_size
             self.writer.add_scalar(
-                'Average Loss', avg_loss, global_step=i_step)
+                'Loss', loss, global_step=i_step)
+
+            self.writer.add_image('Adversarial Patch',
+                                  self._patch.squeeze(dim=0), global_step=i_step)
 
             # save patch every n iterations
-            if (i_step + 1) % 1 == 0:
-                patch_copy = self._patch.detach().clone()
-                patch_copy = TF.to_pil_image(patch_copy[0].cpu())
-                patch_copy.save('outputs/patch_' + str(i_step) + '.png')
+            if i_step == 0 or (i_step + 1) % self.logging_frequency == 0:
+                # patch_copy = self._patch.detach().clone()
+                # patch_copy = TF.to_pil_image(patch_copy[0].cpu())
+                # patch_copy.save('outputs/patch_' + str(i_step) + '.png')
 
                 # save New_batch too
                 New_batch_copy = New_batch.detach().clone()
@@ -186,7 +207,7 @@ class max_pro(torch.nn.Module):
             all_outputs = outputs[0]
 
         class_confidence = all_outputs[:, :, 5:5 + self.num_cat]
-        class_confidence = torch.softmax(class_confidence, dim=2)
+
         class_confidence = class_confidence[:, :, self.target_ID]
 
         max_prob = torch.max(class_confidence, dim=1)[0]
