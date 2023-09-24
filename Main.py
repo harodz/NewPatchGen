@@ -76,6 +76,8 @@ def main(conf: DictConfig):  # conf: DictConfig
     patch_location = conf.patch_location
     ksize_range = conf.ksize_range
     logging_frequency = conf.logging_frequency
+    rotation_range = conf.rotation_range
+    tv_weight = conf.tv_weight
 
     if os.name == 'nt':
         # windows
@@ -139,7 +141,9 @@ def main(conf: DictConfig):  # conf: DictConfig
         max_iter=max_iter,
         batch_size=batch_size,
         ksize_range=ksize_range,
-        logging_frequency=logging_frequency
+        logging_frequency=logging_frequency,
+        rotation_range=rotation_range,
+        tv_weight=tv_weight
     )
 
     patch = ap.generate(x=x)

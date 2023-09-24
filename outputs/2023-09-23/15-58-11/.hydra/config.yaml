@@ -1,0 +1,9 @@
+learning_rate: 0.1
+batch_size: 32
+max_iter: 300
+patch_shape: ${tuple:3, 100, 100}
+patch_location: ${tuple:200, 310}
+ksize_range: ${tuple:0, 20}
+rotation_range: ${tuple:-10, 10}
+logging_frequency: 20
+tv_weight: 0.5
