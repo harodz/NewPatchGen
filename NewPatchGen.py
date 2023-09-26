@@ -34,7 +34,10 @@ class NewPatchGen():
         # range of kernel size for gaussian blur
         ksize_range: Tuple[int, int] = (5, 25),
         rotation_range: Tuple[int, int] = (-15, 15),
-        tv_weight: float = 0.1
+        tv_weight: float = 0.1,
+        skip_prob: float = 0.001,
+        scheduler_step_size: int = 100,
+        scheduler_gamma: float = 0.9
     ):
         self.writer = SummaryWriter(log_dir='./tensorboard_logs')
 
@@ -48,8 +51,11 @@ class NewPatchGen():
         self.num_cat = num_cat
         self.logging_frequency = logging_frequency
         self.ksize_range = ksize_range
-        self.rotaion_range = rotation_range
+        self.rotation_range = rotation_range
         self.tv_weight = tv_weight
+        self.skip_prob = skip_prob
+        self.scheduler_step_size = scheduler_step_size
+        self.scheduler_gamma = scheduler_gamma
 
         # random patch initialization
         self._patch = torch.rand(
@@ -62,13 +68,15 @@ class NewPatchGen():
         self._patch.requires_grad = True
         self.optimizer = torch.optim.Adam(
             [self._patch], lr=self.learning_rate, amsgrad=True)
+        self.scheduler = torch.optim.lr_scheduler.StepLR(
+            self.optimizer, step_size=100, gamma=0.9)
 
         self.verbose = verbose
         self.patch_location = patch_location
         self.target_ID = target_ID
         self.model = model
 
-        self.max_prob = max_pro(
+        self.MaxPro = MaxPro(
             model=self.model, num_cat=self.num_cat, target_ID=self.target_ID).to(self.device)
 
     def apply_patch(self, x: torch.tensor):
@@ -97,48 +105,63 @@ class NewPatchGen():
         patched_x = self.apply_patch(x)
 
         # Add blur:
-        ksize = 2 * \
-            np.random.randint(self.ksize_range[0], self.ksize_range[1]) + 1
-        patched_x = TF.gaussian_blur(patched_x, ksize)
+        if random.random() >= self.skip_prob:
+            ksize = 2 * \
+                np.random.randint(self.ksize_range[0], self.ksize_range[1]) + 1
+            patched_x = TF.gaussian_blur(patched_x, ksize)
 
         # Resize to smaller images
-        new_size = np.random.randint(128, 640)
-        patched_x = TF.resize(patched_x, [new_size, new_size])
-        patched_x = TF.pad(
-            patched_x, [(640 - new_size) // 2, (640 - new_size) // 2])
-        patched_x = TF.resize(patched_x, [640, 640])
+        if random.random() >= self.skip_prob:
+            new_size = np.random.randint(128, 640)
+            patched_x = TF.resize(patched_x, [new_size, new_size])
+            patched_x = TF.pad(
+                patched_x, [(640 - new_size) // 2, (640 - new_size) // 2])
+            patched_x = TF.resize(patched_x, [640, 640])
 
         # Random Rotation
-        patched_x = TF.rotate(patched_x, random.randint(
-            self.rotaion_range[0], self.rotaion_range[1]))
+        if random.random() >= self.skip_prob:
+            patched_x = TF.rotate(patched_x, random.randint(
+                self.rotation_range[0], self.rotation_range[1]))
 
         # Perspective Transform
-        def random_shift(val, shift_range=(-100, 100)):
-            return val + random.uniform(*shift_range)
+        if random.random() >= self.skip_prob:
+            def random_shift(val, shift_range=(-100, 100)):
+                return val + random.uniform(*shift_range)
 
-        # Define source and destination points
-        src_points = [[0, 0], [639, 0], [639, 639], [
-            0, 639]]  # corners of the original image
-        dst_points = [
-            [random_shift(0), random_shift(0)],
-            [random_shift(639), random_shift(0)],
-            [random_shift(639), random_shift(639)],
-            [random_shift(0), random_shift(639)]
-        ]
+            # Define source and destination points
+            src_points = [[0, 0], [639, 0], [639, 639], [
+                0, 639]]  # corners of the original image
+            dst_points = [
+                [random_shift(0), random_shift(0)],
+                [random_shift(639), random_shift(0)],
+                [random_shift(639), random_shift(639)],
+                [random_shift(0), random_shift(639)]
+            ]
 
-        patched_x = TF.perspective(
-            patched_x, startpoints=src_points, endpoints=dst_points)
+            patched_x = TF.perspective(
+                patched_x, startpoints=src_points, endpoints=dst_points)
 
         # ColorJitter
-        brightness_factor = np.random.uniform(0.4, 1.5)
-        saturation_factor = np.random.uniform(0.4, 1.5)
-        hue_factor = np.random.uniform(-0.1, 0.1)
-        contrast_factor = np.random.uniform(0.4, 1.5)
+        if random.random() >= self.skip_prob:
+            brightness_factor = np.random.uniform(0.4, 1.5)
+            saturation_factor = np.random.uniform(0.4, 1.5)
+            hue_factor = np.random.uniform(-0.1, 0.1)
+            contrast_factor = np.random.uniform(0.4, 1.5)
 
-        patched_x = TF.adjust_brightness(patched_x, brightness_factor)
-        patched_x = TF.adjust_saturation(patched_x, saturation_factor)
-        patched_x = TF.adjust_hue(patched_x, hue_factor)
-        patched_x = TF.adjust_contrast(patched_x, contrast_factor)
+            patched_x = TF.adjust_brightness(patched_x, brightness_factor)
+            patched_x = TF.adjust_saturation(patched_x, saturation_factor)
+            patched_x = TF.adjust_hue(patched_x, hue_factor)
+            patched_x = TF.adjust_contrast(patched_x, contrast_factor)
+
+        # # Add Gaussian Noise
+        # if random.random() >= self.skip_prob:
+        #     std_intensity = np.random.uniform(0.01, 0.1)
+        #     noise = torch.normal(
+        #         mean=0., std=std_intensity, size=patched_x.shape)
+        #     noise = noise.to(device=self.device)
+        #     patched_x = patched_x + noise
+        #     # Keep values within [0, 1]
+        #     patched_x = torch.clamp(patched_x, 0, 1)
 
         return patched_x
 
@@ -176,25 +199,24 @@ class NewPatchGen():
 
             New_batch = torch.cat(Transformations, dim=0)
 
-            max_confidence, max_objectness = self.max_prob(New_batch)
+            max_final_score = torch.mean(self.MaxPro(New_batch))
+            tv_loss = self.tv_weight * self._total_variation_loss()
 
-            loss = torch.mean(max_confidence) + torch.mean(max_objectness) + \
-                self.tv_weight * self._total_variation_loss()
+            loss = max_final_score + tv_loss
 
             loss.backward()
 
             self.optimizer.step()
             self.optimizer.zero_grad(set_to_none=True)
             self._patch.data.clamp_(0, 1)
+            self.scheduler.step()
 
             self.writer.add_scalar(
                 'Total_Loss', loss, global_step=i_step)
             self.writer.add_scalar(
-                'Max_Confidence', torch.mean(max_confidence), global_step=i_step)
+                'Max_Final_Score', max_final_score, global_step=i_step)
             self.writer.add_scalar(
-                'Max_Objectness', torch.mean(max_objectness), global_step=i_step)
-            self.writer.add_scalar(
-                'Total_Variation_Loss', self.tv_weight * self._total_variation_loss(), global_step=i_step)
+                'Total_Variation_Loss', tv_loss, global_step=i_step)
 
             self.writer.add_image('Adversarial Patch',
                                   self._patch.squeeze(dim=0), global_step=i_step)
@@ -210,16 +232,20 @@ class NewPatchGen():
                 New_batch_copy = TF.to_pil_image(New_batch_copy[0].cpu())
                 New_batch_copy.save('outputs/x_' + str(i_step) + '.png')
 
+                # # log learning rate
+                # logging.info(
+                #     f"Current learning rate: {self.optimizer.param_groups[0]['lr']}")
+
         self.writer.close()
         save_tensor_to_image(self._patch, 'Patch/patch.png')
         final_patched = self.apply_patch(og_x)
         save_tensor_to_image(final_patched, 'Patch/final_patched.png')
 
 
-class max_pro(torch.nn.Module):
+class MaxPro(torch.nn.Module):
     def __init__(self, model, num_cat, target_ID):
 
-        super(max_pro, self).__init__()
+        super(MaxPro, self).__init__()
         self.model = model
         self.num_cat = num_cat
         self.target_ID = target_ID
@@ -239,12 +265,13 @@ class max_pro(torch.nn.Module):
 
         class_confidence = all_outputs[:, :, 5:5 + self.num_cat]
         class_confidence = class_confidence[:, :, self.target_ID]
-        max_confidence = torch.max(class_confidence, dim=1)[0]
 
         objectness = all_outputs[:, :, 4]
-        max_objectness = torch.max(objectness, dim=1)[0]
 
-        return max_confidence, max_objectness
+        final_score = objectness * class_confidence
+        max_final_score = torch.max(final_score, dim=1)[0]
+
+        return max_final_score
 
 
 def save_tensor_to_image(tensor, filename):

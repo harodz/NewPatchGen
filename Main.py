@@ -78,6 +78,9 @@ def main(conf: DictConfig):  # conf: DictConfig
     logging_frequency = conf.logging_frequency
     rotation_range = conf.rotation_range
     tv_weight = conf.tv_weight
+    skip_prob = conf.skip_prob
+    scheduler_step_size = conf.scheduler_step_size
+    scheduler_gamma = conf.scheduler_gamma
 
     if os.name == 'nt':
         # windows
@@ -143,7 +146,10 @@ def main(conf: DictConfig):  # conf: DictConfig
         ksize_range=ksize_range,
         logging_frequency=logging_frequency,
         rotation_range=rotation_range,
-        tv_weight=tv_weight
+        tv_weight=tv_weight,
+        skip_prob=skip_prob,
+        scheduler_step_size=scheduler_step_size,
+        scheduler_gamma=scheduler_gamma,
     )
 
     patch = ap.generate(x=x)

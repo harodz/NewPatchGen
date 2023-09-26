@@ -24,22 +24,24 @@ carla:
   # texture: 'C:\\Users\\Devon\\Project\\NewPatchGen\\Assets\\New.png' # OG
   # texture: 'C:\\Users\\Devon\\Project\\NewPatchGen\\outputs\\2023-09-19\\23-58-09\\Patch\\texture.png' # Good1
   # texture: 'C:\\Users\\Devon\\Project\\NewPatchGen\\outputs\\2023-09-19\\23-40-26\\Patch\\texture.png' # Good2
-  texture: 'C:\\Users\\Devon\\Project\\NewPatchGen\\outputs\\2023-09-23\\15-58-11\\Patch\\texture.png' # Good3
+  # texture: 'C:\\Users\\Devon\\Project\\NewPatchGen\\outputs\\2023-09-23\\15-58-11\\Patch\\texture.png' # Good3
+  # texture: 'C:\\Users\\Devon\\Project\\NewPatchGen\\outputs\\2023-09-25\\21-16-22\\Patch\\texture.png' # Good4
+  texture: C:\Users\Devon\Project\NewPatchGen\outputs\2023-09-26\01-08-51\Patch\texture.png
   # texture: 'C:\\Users\\Devon\\Project\\NewPatchGen\\Assets\\Random_noise_100.jpeg' # Random Noise
 
 output_dir: "_out2"
 max_frames: 10
 
 weather:
-  cloudiness: 80.0
-  precipitation: 80.0
-  precipitation_deposits: 80.0
+  cloudiness: 0.0
+  precipitation: 0.0
+  precipitation_deposits: 0.0
   wind_intensity: 0.0
   sun_azimuth_angle: 0.0
-  sun_altitude_angle: 90.0
+  sun_altitude_angle: 30.0
   fog_density: 0.0
   fog_distance: 0.0
-  wetness: 80.0
+  wetness: 0.0
 
 spawn_actors:
   # - blueprint:
