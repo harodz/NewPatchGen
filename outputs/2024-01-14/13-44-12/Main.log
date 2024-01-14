@@ -1,0 +1,23 @@
+[2024-01-14 13:44:12,985][__main__][INFO] - learning_rate: 0.1
+batch_size: 32
+max_iter: 250
+patch_shape: ${tuple:3, 100, 100}
+patch_location: ${tuple:200, 310}
+ksize_range: ${tuple:0, 20}
+resize_range: ${tuple:128, 640}
+rotation_range: ${tuple:-10, 10}
+shift_range: ${tuple:0, 0}
+brightness_range: ${tuple:0, 0}
+saturation_range: ${tuple:0, 0}
+hue_range: ${tuple:0, 0}
+contrast_range: ${tuple:0, 0}
+noise_intensity: ${tuple:0, 0}
+tv_weight: 0.1
+skip_prob: 0.001
+scheduler_step_size: 100
+scheduler_gamma: 0.9
+logging_frequency: 100
+
+[2024-01-14 13:44:13,321][__main__][INFO] - Device: cuda:0
+[2024-01-14 13:44:50,057][__main__][INFO] - tensor([[3.07698e+02, 1.98942e+02, 4.09210e+02, 2.99185e+02, 8.13199e-01, 5.50000e+01],
+        [1.74364e+02, 1.84363e+02, 4.68242e+02, 4.58537e+02, 3.56831e-01, 5.50000e+01]], device='cuda:0')

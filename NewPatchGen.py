@@ -33,7 +33,17 @@ class NewPatchGen():
         logging_frequency: int = 5,  # log every n iterations
         # range of kernel size for gaussian blur
         ksize_range: Tuple[int, int] = (5, 25),
+        resize_range: Tuple[int, int] = (128, 640),
         rotation_range: Tuple[int, int] = (-15, 15),
+        shift_range: Tuple[int, int] = (-100, 100),
+
+        brightness_range: Tuple[float, float] = (0.4, 1.5),
+        saturation_range: Tuple[float, float] = (0.4, 1.5),
+        hue_range: Tuple[float, float] = (-0.1, 0.1),
+        contrast_range: Tuple[float, float] = (0.4, 1.5),
+
+        noise_intensity: Tuple[float, float] = (0.01, 0.1),
+
         tv_weight: float = 0.1,
         skip_prob: float = 0.001,
         scheduler_step_size: int = 100,
@@ -49,13 +59,24 @@ class NewPatchGen():
         self.max_iter = max_iter
         self.batch_size = batch_size
         self.num_cat = num_cat
-        self.logging_frequency = logging_frequency
+
         self.ksize_range = ksize_range
+        self.resize_range = resize_range
         self.rotation_range = rotation_range
+        self.shift_range = shift_range
+
+        self.brightness_range = brightness_range
+        self.saturation_range = saturation_range
+        self.hue_range = hue_range
+        self.contrast_range = contrast_range
+
+        self.noise_intensity = noise_intensity
+
         self.tv_weight = tv_weight
         self.skip_prob = skip_prob
         self.scheduler_step_size = scheduler_step_size
         self.scheduler_gamma = scheduler_gamma
+        self.logging_frequency = logging_frequency
 
         # random patch initialization
         self._patch = torch.rand(
@@ -105,63 +126,102 @@ class NewPatchGen():
         patched_x = self.apply_patch(x)
 
         # Add blur:
-        if random.random() >= self.skip_prob:
-            ksize = 2 * \
-                np.random.randint(self.ksize_range[0], self.ksize_range[1]) + 1
-            patched_x = TF.gaussian_blur(patched_x, ksize)
+        if self.ksize_range[0] == self.ksize_range[1]:
+            pass
+        else:
+            if random.random() >= self.skip_prob:
+                ksize = 2 * \
+                    np.random.randint(
+                        self.ksize_range[0], self.ksize_range[1]) + 1
+                patched_x = TF.gaussian_blur(patched_x, ksize)
 
         # Resize to smaller images
-        if random.random() >= self.skip_prob:
-            new_size = np.random.randint(128, 640)
-            patched_x = TF.resize(patched_x, [new_size, new_size])
-            patched_x = TF.pad(
-                patched_x, [(640 - new_size) // 2, (640 - new_size) // 2])
-            patched_x = TF.resize(patched_x, [640, 640])
+        if self.resize_range[0] == self.resize_range[1]:
+            pass
+        else:
+            if random.random() >= self.skip_prob:
+                new_size = np.random.randint(
+                    self.resize_range[0], self.resize_range[1])
+                patched_x = TF.resize(patched_x, [new_size, new_size])
+                patched_x = TF.pad(
+                    patched_x, [(640 - new_size) // 2, (640 - new_size) // 2])
+                patched_x = TF.resize(patched_x, [640, 640])
 
         # Random Rotation
-        if random.random() >= self.skip_prob:
-            patched_x = TF.rotate(patched_x, random.randint(
-                self.rotation_range[0], self.rotation_range[1]))
+        if self.rotation_range[0] == self.rotation_range[1]:
+            pass
+        else:
+            if random.random() >= self.skip_prob:
+                patched_x = TF.rotate(patched_x, random.randint(
+                    self.rotation_range[0], self.rotation_range[1]))
 
         # Perspective Transform
-        if random.random() >= self.skip_prob:
-            def random_shift(val, shift_range=(-100, 100)):
-                return val + random.uniform(*shift_range)
+        if self.shift_range[0] == self.shift_range[1]:
+            pass
+        else:
+            if random.random() >= self.skip_prob:
+                def random_shift(val):
+                    return val + random.uniform(self.shift_range[0], self.shift_range[1])
 
-            # Define source and destination points
-            src_points = [[0, 0], [639, 0], [639, 639], [
-                0, 639]]  # corners of the original image
-            dst_points = [
-                [random_shift(0), random_shift(0)],
-                [random_shift(639), random_shift(0)],
-                [random_shift(639), random_shift(639)],
-                [random_shift(0), random_shift(639)]
-            ]
+                # Define source and destination points
+                src_points = [[0, 0], [639, 0], [639, 639], [
+                    0, 639]]  # corners of the original image
+                dst_points = [
+                    [random_shift(0), random_shift(0)],
+                    [random_shift(639), random_shift(0)],
+                    [random_shift(639), random_shift(639)],
+                    [random_shift(0), random_shift(639)]
+                ]
 
-            patched_x = TF.perspective(
-                patched_x, startpoints=src_points, endpoints=dst_points)
+                patched_x = TF.perspective(
+                    patched_x, startpoints=src_points, endpoints=dst_points)
 
         # ColorJitter
         if random.random() >= self.skip_prob:
-            brightness_factor = np.random.uniform(0.4, 1.5)
-            saturation_factor = np.random.uniform(0.4, 1.5)
-            hue_factor = np.random.uniform(-0.1, 0.1)
-            contrast_factor = np.random.uniform(0.4, 1.5)
+            if self.brightness_range[0] == self.brightness_range[1]:
+                pass
+            else:
+                brightness_factor = np.random.uniform(
+                    self.brightness_range[0], self.brightness_range[1])
+                patched_x = TF.adjust_brightness(patched_x, brightness_factor)
 
-            patched_x = TF.adjust_brightness(patched_x, brightness_factor)
-            patched_x = TF.adjust_saturation(patched_x, saturation_factor)
-            patched_x = TF.adjust_hue(patched_x, hue_factor)
-            patched_x = TF.adjust_contrast(patched_x, contrast_factor)
+        if random.random() >= self.skip_prob:
+            if self.saturation_range[0] == self.saturation_range[1]:
+                pass
+            else:
+                saturation_factor = np.random.uniform(
+                    self.saturation_range[0], self.saturation_range[1])
+                patched_x = TF.adjust_saturation(
+                    patched_x, saturation_factor)
 
-        # # Add Gaussian Noise
-        # if random.random() >= self.skip_prob:
-        #     std_intensity = np.random.uniform(0.01, 0.1)
-        #     noise = torch.normal(
-        #         mean=0., std=std_intensity, size=patched_x.shape)
-        #     noise = noise.to(device=self.device)
-        #     patched_x = patched_x + noise
-        #     # Keep values within [0, 1]
-        #     patched_x = torch.clamp(patched_x, 0, 1)
+        if random.random() >= self.skip_prob:
+            if self.hue_range[0] == self.hue_range[1]:
+                pass
+            else:
+                hue_factor = np.random.uniform(
+                    self.hue_range[0], self.hue_range[1])
+                patched_x = TF.adjust_hue(patched_x, hue_factor)
+
+        if random.random() >= self.skip_prob:
+            if self.contrast_range[0] == self.contrast_range[1]:
+                pass
+            else:
+                contrast_factor = np.random.uniform(
+                    self.contrast_range[0], self.contrast_range[1])
+                patched_x = TF.adjust_contrast(patched_x, contrast_factor)
+
+        # Add Gaussian Noise
+        if self.noise_intensity[0] == self.noise_intensity[1]:
+            pass
+        else:
+            if random.random() >= self.skip_prob:
+                std_intensity = np.random.uniform(0.01, 0.1)
+                noise = torch.normal(
+                    mean=0., std=std_intensity, size=patched_x.shape)
+                noise = noise.to(device=self.device)
+                patched_x = patched_x + noise
+                # Keep values within [0, 1]
+                patched_x = torch.clamp(patched_x, 0, 1)
 
         return patched_x
 

@@ -493,7 +493,8 @@ def textureSet(img_path: str, world):
             a = 255
             texture.set(x, y, carla.Color(r, g, b, a))
 
-    sign = 'BP_ADVSTOP_2'
+    # The name of the sign in the world. Check Unreal Editor for the name of the sign.
+    sign = 'BP_ADVSTOP_4'
     world.apply_color_texture_to_object(
         sign, carla.MaterialParameter.Diffuse, texture)
 
@@ -506,7 +507,7 @@ def gif_maker(img_path: str, output_path: str):
 
     import yolov5
     model = yolov5.load(
-        'C:\\Users\\Devon\\Project\\NewPatchGen\\Assets/yolov5s.pt')
+        'D:/NewPatchGen/Assets/yolov5s.pt')
 
     # filepaths
     fp_in = img_path
@@ -528,6 +529,7 @@ def gif_maker(img_path: str, output_path: str):
 
     # get the directory folder path of the images
     img_path = os.path.dirname(img_path)
+    cat_11_confidence = []
 
     for filename in os.listdir(img_path):
         img = os.path.join(img_path, filename)
@@ -538,6 +540,17 @@ def gif_maker(img_path: str, output_path: str):
         boxes = predictions[:, :4]  # x1, y1, x2, y2
         scores = predictions[:, 4]
         categories = predictions[:, 5]
+
+        confidence_found = None
+        # save confidence in csv file for stop sign
+        for i in range(len(categories)):
+            if categories[i] == 11:
+                confidence_found = scores.flatten().tolist()[i]
+
+        if confidence_found:
+            cat_11_confidence.append(confidence_found)
+        else:
+            cat_11_confidence.append(0)
 
         save_dir = os.path.dirname(img) + '/detections'
         results.save(save_dir=save_dir, exist_ok=True)
@@ -559,6 +572,17 @@ def gif_maker(img_path: str, output_path: str):
         # https://pillow.readthedocs.io/en/stable/handbook/image-file-formats.html#gif
         img.save(fp=fp_out, format='GIF', append_images=imgs,
                  save_all=True, duration=200, loop=0)
+
+    import csv
+
+    # Define the CSV file path
+    csv_file_path = os.path.dirname(img_path) + "category_11_confidences.csv"
+
+    # Write all confidences to the CSV file
+    with open(csv_file_path, mode='w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(["Confidence"])
+        writer.writerows([[confidence] for confidence in cat_11_confidence])
 
     return
 # ==============================================================================
@@ -757,7 +781,7 @@ def data_saver_loop(conf):
 # ==============================================================================
 
 
-@hydra.main(config_path="configs", config_name="config_tracking_copy")
+@hydra.main(config_path="configs", config_name="config_tracking_sunny")
 def main(conf: DictConfig):
     schema = OmegaConf.structured(ConfigSchema)
     OmegaConf.merge(schema, conf)

@@ -1,0 +1,19 @@
+learning_rate: 0.1
+batch_size: 32
+max_iter: 250
+patch_shape: ${tuple:3, 100, 100}
+patch_location: ${tuple:200, 310}
+ksize_range: ${tuple:0, 20}
+resize_range: ${tuple:128, 640}
+rotation_range: ${tuple:-10, 10}
+shift_range: ${tuple:-100, 100}
+brightness_range: ${tuple:0, 0}
+saturation_range: ${tuple:0, 0}
+hue_range: ${tuple:0, 0}
+contrast_range: ${tuple:0, 0}
+noise_intensity: ${tuple:0.01, 0.1}
+tv_weight: 0.1
+skip_prob: 0.001
+scheduler_step_size: 100
+scheduler_gamma: 0.9
+logging_frequency: 100

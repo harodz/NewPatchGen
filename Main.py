@@ -22,6 +22,10 @@ import os
 import sys
 
 
+asset_path = os.path.join(os.path.dirname(__file__), 'Assets')
+weights_path = os.path.join(asset_path, 'yolov5s.pt')
+image_path = os.path.join(asset_path, 'New.png')
+
 logger = logging.getLogger(__name__)
 coloredlogs.install(level=logging.INFO)
 
@@ -62,35 +66,40 @@ def main(conf: DictConfig):  # conf: DictConfig
     '''
     Load Model and setup
     '''
-    model = torch.hub.load("ultralytics/yolov5", "yolov5s", autoshape=False)
+    model = yolov5.load(
+        weights_path, autoshape=False)
 
     logger.info('Device: ' + str(next(model.parameters()).device))
 
     '''
-    Attack
+    Loading Configurations
     '''
     learning_rate = conf.learning_rate
     batch_size = conf.batch_size
     max_iter = conf.max_iter
+
     patch_shape = conf.patch_shape
     patch_location = conf.patch_location
+
     ksize_range = conf.ksize_range
-    logging_frequency = conf.logging_frequency
+    resize_range = conf.resize_range
     rotation_range = conf.rotation_range
+    shift_range = conf.shift_range
+
+    brightness_range = conf.brightness_range
+    saturation_range = conf.saturation_range
+    hue_range = conf.hue_range
+    contrast_range = conf.contrast_range
+
+    noise_intensity = conf.noise_intensity
+
     tv_weight = conf.tv_weight
     skip_prob = conf.skip_prob
     scheduler_step_size = conf.scheduler_step_size
     scheduler_gamma = conf.scheduler_gamma
+    logging_frequency = conf.logging_frequency
 
-    if os.name == 'nt':
-        # windows
-        img = Image.open(
-            'C:\\Users\\Devon\\Project\\NewPatchGen\\Assets\\New.png')
-    elif sys.platform == 'darwin':
-        # mac
-        img = Image.open(
-            '/Users/dayuzhang/Documents/NewPatchGen/Assets/New.png')
-
+    img = Image.open(image_path)
     img = img.rotate(180)
 
     import os
@@ -143,13 +152,24 @@ def main(conf: DictConfig):  # conf: DictConfig
         learning_rate=learning_rate,
         max_iter=max_iter,
         batch_size=batch_size,
+
         ksize_range=ksize_range,
-        logging_frequency=logging_frequency,
+        resize_range=resize_range,
         rotation_range=rotation_range,
+        shift_range=shift_range,
+
+        brightness_range=brightness_range,
+        saturation_range=saturation_range,
+        hue_range=hue_range,
+        contrast_range=contrast_range,
+
+        noise_intensity=noise_intensity,
+
         tv_weight=tv_weight,
         skip_prob=skip_prob,
         scheduler_step_size=scheduler_step_size,
         scheduler_gamma=scheduler_gamma,
+        logging_frequency=logging_frequency,
     )
 
     patch = ap.generate(x=x)
@@ -167,10 +187,10 @@ def main(conf: DictConfig):  # conf: DictConfig
     texture.save('Patch/texture.png')
 
     # detect the patch
-    model_pt = yolov5.load(
-        'C:\\Users\\Devon\\Project\\NewPatchGen\\Assets/yolov5s.pt')
+    model_pt = yolov5.load(weights_path)
     img_path = 'Patch/final_patched.png'
     results = model_pt(img_path)
+    logger.info(results.xyxy[0])
 
     # Render the results on the original image
     img_with_boxes = results.render()[0]
