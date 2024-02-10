@@ -21,11 +21,13 @@ carla:
   townmap: "Town10HD_Opt"
   traffic_manager_port: 8000
   retry: 10
-  # texture: D:\NewPatchGen\Assets\New.png # OG
-  texture: D:\NewPatchGen\outputs\2024-01-14\13-53-32\Patch\texture.png
+  texture: D:\NewPatchGen\Assets\New.png # OG
+  # texture: D:\NewPatchGen\outputs\2024-01-14\13-53-32\Patch\texture.png
   # texture: D:\NewPatchGen\Assets\Random_noise_100.jpeg # Random Noise
+  sign_name: "BP_ADVSTOP_4"
 output_dir: "_out2"
 max_frames: 10
+
 
 weather:
   cloudiness: 0.0
@@ -37,6 +39,7 @@ weather:
   fog_density: 0.0
   fog_distance: 0.0
   wetness: 0.0
+
 
 spawn_actors:
   # - blueprint:

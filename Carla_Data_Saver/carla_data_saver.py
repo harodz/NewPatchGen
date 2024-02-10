@@ -476,7 +476,7 @@ def save_actors_dynamic_metadata(actors, worldsnapshot, world):
     return actors_data
 
 
-def textureSet(img_path: str, world):
+def textureSet(img_path: str, world, sign_name: str):
     image = Image.open(img_path)
     width = image.size[0]
     height = image.size[1]
@@ -494,9 +494,9 @@ def textureSet(img_path: str, world):
             texture.set(x, y, carla.Color(r, g, b, a))
 
     # The name of the sign in the world. Check Unreal Editor for the name of the sign.
-    sign = 'BP_ADVSTOP_4'
+    sign_name = sign_name
     world.apply_color_texture_to_object(
-        sign, carla.MaterialParameter.Diffuse, texture)
+        sign_name, carla.MaterialParameter.Diffuse, texture)
 
 
 def gif_maker(img_path: str, output_path: str):
@@ -583,6 +583,13 @@ def gif_maker(img_path: str, output_path: str):
         writer = csv.writer(file)
         writer.writerow(["Confidence"])
         writer.writerows([[confidence] for confidence in cat_11_confidence])
+        # Write mean
+        writer.writerow(["Mean"])
+        writer.writerow([sum(cat_11_confidence) / len(cat_11_confidence)])
+        # Write median
+        writer.writerow(["Median"])
+        writer.writerow([sorted(cat_11_confidence)[len(
+            cat_11_confidence) // 2]])
 
     return
 # ==============================================================================
@@ -633,7 +640,7 @@ def data_saver_loop(conf):
 
             # apply texture
             if conf.carla.get("texture"):
-                textureSet(conf.carla.texture, world)
+                textureSet(conf.carla.texture, world, conf.carla.sign_name)
 
             # Check if synchronous:
             t_prev = world.get_snapshot().timestamp.elapsed_seconds
@@ -781,7 +788,7 @@ def data_saver_loop(conf):
 # ==============================================================================
 
 
-@hydra.main(config_path="configs", config_name="config_tracking_sunny")
+@hydra.main(config_path="configs", config_name="config_tracking_sunny_copy")
 def main(conf: DictConfig):
     schema = OmegaConf.structured(ConfigSchema)
     OmegaConf.merge(schema, conf)

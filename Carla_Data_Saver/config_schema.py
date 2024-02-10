@@ -30,6 +30,7 @@ class Carla:
     townmap: Optional[str] = MISSING
     retry: Optional[int] = MISSING
     texture: Optional[str] = MISSING
+    sign_name: Optional[str] = MISSING
 
 
 @dataclass

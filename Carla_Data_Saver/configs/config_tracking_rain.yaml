@@ -21,8 +21,8 @@ carla:
   townmap: "Town10HD_Opt"
   traffic_manager_port: 8000
   retry: 10
-  # texture: D:\NewPatchGen\Assets\New.png # OG
-  texture: D:\NewPatchGen\outputs\2024-01-14\13-53-32\Patch\texture.png
+  texture: D:\NewPatchGen\Assets\New.png # OG
+  # texture: D:\NewPatchGen\outputs\2024-01-14\13-53-32\Patch\texture.png
   # texture: D:\NewPatchGen\Assets\Random_noise_100.jpeg # Random Noise
 output_dir: "_out2"
 max_frames: 10

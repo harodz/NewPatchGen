@@ -1,0 +1,94 @@
+[2024-02-11 02:19:42,688][__main__][INFO] - listening to server localhost:2000
+[2024-02-11 02:19:42,694][__main__][INFO] - carla:
+  host: localhost
+  port: 2000
+  timeout: 30
+  sync:
+    fps: 10
+    timeout: 30
+  seed: 30
+  townmap: Town10HD_Opt
+  traffic_manager_port: 8000
+  retry: 10
+  texture: D:\NewPatchGen\Assets\New.png
+  sign_name: BP_ADVSTOP3
+output_dir: _out2
+max_frames: 10
+weather:
+  cloudiness: 30.0
+  precipitation: 60.0
+  precipitation_deposits: 20.0
+  wind_intensity: 0.0
+  sun_azimuth_angle: 0.0
+  sun_altitude_angle: 30.0
+  fog_density: 30.0
+  fog_distance: 0.0
+  wetness: 60.0
+spawn_actors:
+- blueprint:
+    name: sensor.camera.rgb
+    attr:
+      image_size_x: '1280'
+      image_size_y: '640'
+    speed: 1
+  transform:
+    location:
+      x: -18.2
+      'y': 11.0
+      z: 2.6
+    rotation:
+      yaw: 180.0
+  destination_transform:
+    location:
+      x: -28.2
+      'y': 11.0
+      z: 2.6
+  sensor_motion:
+    jitter_magnitude:
+      x: 0.01
+      'y': 0.001
+      z: 0.01
+
+[2024-02-11 02:19:42,699][__main__][INFO] - CARLA server version: 0.9.15-dirty
+[2024-02-11 02:19:42,699][__main__][INFO] - CARLA client version: 0.9.15-dirty
+[2024-02-11 02:19:49,353][__main__][INFO] - Time between ticks: 0.03333333507180214 and Delta seconds: 0.03333333333333333
+[2024-02-11 02:19:49,354][__main__][INFO] - Setting weather.
+[2024-02-11 02:19:49,356][__main__][INFO] - Selected ActorBlueprint(id=sensor.camera.rgb,tags=[sensor, camera, rgb]) blueprint from: [ActorBlueprint(id=sensor.camera.rgb,tags=[sensor, camera, rgb])]
+[2024-02-11 02:19:49,358][__main__][INFO] - Config: {'blueprint': {'name': 'sensor.camera.rgb', 'attr': {'image_size_x': '1280', 'image_size_y': '640'}, 'speed': 1}, 'transform': {'location': {'x': -18.2, 'y': 11.0, 'z': 2.6}, 'rotation': {'yaw': 180.0}}, 'destination_transform': {'location': {'x': -28.2, 'y': 11.0, 'z': 2.6}}, 'sensor_motion': {'jitter_magnitude': {'x': 0.01, 'y': 0.001, 'z': 0.01}}}
+[2024-02-11 02:19:49,366][__main__][INFO] - Spawned actor: sensor.camera.rgb with id: 84
+[2024-02-11 02:19:49,368][__main__][INFO] - Retrieved sensor motion dict after spawning all actors{84: {'jitter_bound_min': <carla.libcarla.Location object at 0x00000253509DD8B0>, 'jitter_bound_max': <carla.libcarla.Location object at 0x00000253509DDEF0>, 'jitter_magnitude': {'x': 0.01, 'y': 0.001, 'z': 0.01}, 'linear_motion_step': <carla.libcarla.Location object at 0x00000253509DDB30>, 'linear_motion_time': 10.0, 'destination': <carla.libcarla.Location object at 0x00000253509DDF40>}}
+[2024-02-11 02:19:49,391][__main__][INFO] - Init sensors: (<carla.libcarla.ServerSideSensor object at 0x00000253509CC740>,), kwargs: 30
+[2024-02-11 02:19:50,439][__main__][INFO] - Making queue for sensor: Actor(id=84, type=sensor.camera.rgb)
+[2024-02-11 02:19:50,439][root][INFO] - Begin sync_mode.tick
+[2024-02-11 02:19:50,454][__main__][INFO] - Snapshot: WorldSnapshot(frame=51235) and length of sensor_data: 1
+[2024-02-11 02:19:50,608][__main__][INFO] - Stepping sensor with Sensor ID: 84
+[2024-02-11 02:19:50,622][root][INFO] - Begin sync_mode.tick
+[2024-02-11 02:19:50,633][__main__][INFO] - Snapshot: WorldSnapshot(frame=51236) and length of sensor_data: 1
+[2024-02-11 02:19:50,786][__main__][INFO] - Stepping sensor with Sensor ID: 84
+[2024-02-11 02:19:50,800][root][INFO] - Begin sync_mode.tick
+[2024-02-11 02:19:50,809][__main__][INFO] - Snapshot: WorldSnapshot(frame=51237) and length of sensor_data: 1
+[2024-02-11 02:19:50,963][__main__][INFO] - Stepping sensor with Sensor ID: 84
+[2024-02-11 02:19:50,978][root][INFO] - Begin sync_mode.tick
+[2024-02-11 02:19:50,987][__main__][INFO] - Snapshot: WorldSnapshot(frame=51238) and length of sensor_data: 1
+[2024-02-11 02:19:51,140][__main__][INFO] - Stepping sensor with Sensor ID: 84
+[2024-02-11 02:19:51,155][root][INFO] - Begin sync_mode.tick
+[2024-02-11 02:19:51,164][__main__][INFO] - Snapshot: WorldSnapshot(frame=51239) and length of sensor_data: 1
+[2024-02-11 02:19:51,317][__main__][INFO] - Stepping sensor with Sensor ID: 84
+[2024-02-11 02:19:51,332][root][INFO] - Begin sync_mode.tick
+[2024-02-11 02:19:51,342][__main__][INFO] - Snapshot: WorldSnapshot(frame=51240) and length of sensor_data: 1
+[2024-02-11 02:19:51,495][__main__][INFO] - Stepping sensor with Sensor ID: 84
+[2024-02-11 02:19:51,509][root][INFO] - Begin sync_mode.tick
+[2024-02-11 02:19:51,522][__main__][INFO] - Snapshot: WorldSnapshot(frame=51241) and length of sensor_data: 1
+[2024-02-11 02:19:51,675][__main__][INFO] - Stepping sensor with Sensor ID: 84
+[2024-02-11 02:19:51,689][root][INFO] - Begin sync_mode.tick
+[2024-02-11 02:19:51,701][__main__][INFO] - Snapshot: WorldSnapshot(frame=51242) and length of sensor_data: 1
+[2024-02-11 02:19:51,855][__main__][INFO] - Stepping sensor with Sensor ID: 84
+[2024-02-11 02:19:51,870][root][INFO] - Begin sync_mode.tick
+[2024-02-11 02:19:51,882][__main__][INFO] - Snapshot: WorldSnapshot(frame=51243) and length of sensor_data: 1
+[2024-02-11 02:19:52,037][__main__][INFO] - Stepping sensor with Sensor ID: 84
+[2024-02-11 02:19:52,052][root][INFO] - Begin sync_mode.tick
+[2024-02-11 02:19:52,063][__main__][INFO] - Snapshot: WorldSnapshot(frame=51244) and length of sensor_data: 1
+[2024-02-11 02:19:52,217][__main__][INFO] - Stepping sensor with Sensor ID: 84
+[2024-02-11 02:19:52,231][root][INFO] - Begin sync_mode.tick
+[2024-02-11 02:19:52,232][__main__][INFO] - Max frames, 10, reached. Exiting...
+[2024-02-11 02:19:59,397][__main__][INFO] - Destroying actors
